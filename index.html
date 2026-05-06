@@ -35,7 +35,14 @@
     .controls-hint { position: absolute; top: 80px; right: 20px; display: flex; flex-direction: column; gap: 8px; opacity: 0.5; }
     .hint-item { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); }
     .hint-icon { width: 28px; height: 28px; border: 1px solid rgba(140,123,101,0.4); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-    @media (max-width: 600px) { .controls-hint { display: none; } .info-panel { max-width: 260px; bottom: 16px; left: 16px; } #ar-button { bottom: 100px; right: 16px; } }
+    @media (max-width: 600px) { .controls-hint { display: none; } .info-panel { max-width: 260px; bottom: 16px; left: 16px; } #ar-button { bottom: 100px; right: 16px; } #qr-panel { display: none !important; } }
+    #qr-panel { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(26,18,8,0.92); border: 1px solid rgba(200,151,42,0.25); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 50; backdrop-filter: blur(8px); }
+    #qr-panel canvas { border-radius: 6px; display: block; }
+    #qr-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
+    #qr-url { font-size: 10px; color: var(--gold); opacity: 0.7; }
+    #qr-toggle { position: absolute; top: 70px; left: 50%; transform: translateX(-50%); background: rgba(26,18,8,0.85); border: 1px solid rgba(200,151,42,0.3); border-radius: 50px; padding: 8px 16px; font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); cursor: pointer; z-index: 51; display: flex; align-items: center; gap: 7px; transition: all 0.2s; }
+    #qr-toggle:hover { background: rgba(200,151,42,0.15); }
+    #qr-toggle svg { width: 14px; height: 14px; }
   </style>
 </head>
 <body>
@@ -57,6 +64,7 @@
   <model-viewer
     id="viewer"
     src="./gandhi_plain.glb"
+    ios-src="./gandhi_plain.usdz"
     alt="Mahatma Gandhi Statue from Mapusa, Goa"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -89,9 +97,58 @@
     <div class="hint-item"><div class="hint-icon">⟳</div>Drag to rotate</div>
     <div class="hint-item"><div class="hint-icon">⤢</div>Pinch to zoom</div>
   </div>
+
+  <button id="qr-toggle" onclick="toggleQR()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+      <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/>
+    </svg>
+    Scan QR
+  </button>
+
+  <div id="qr-panel" style="display:none;">
+    <div id="qr-label">Scan to open on phone</div>
+    <canvas id="qr-canvas" width="160" height="160"></canvas>
+    <div id="qr-url">rohnnair.github.io/gandhi-ar</div>
+  </div>
+
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+  let qrGenerated = false;
+
+  function toggleQR() {
+    const panel = document.getElementById('qr-panel');
+    const btn = document.getElementById('qr-toggle');
+    const visible = panel.style.display !== 'none';
+    panel.style.display = visible ? 'none' : 'flex';
+    btn.style.top = visible ? '70px' : (panel.offsetHeight + 80 + 10) + 'px';
+
+    if (!qrGenerated && !visible) {
+      qrGenerated = true;
+      setTimeout(() => {
+        const div = document.createElement('div');
+        const qr = new QRCode(div, {
+          text: 'https://rohnnair.github.io/gandhi-ar',
+          width: 160, height: 160,
+          colorDark: '#1a1208', colorLight: '#F5EDD8',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        setTimeout(() => {
+          const src = div.querySelector('canvas')?.toDataURL() || div.querySelector('img')?.src;
+          if (src) {
+            const canvas = document.getElementById('qr-canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.onload = () => ctx.drawImage(img, 0, 0, 160, 160);
+            img.src = src;
+          }
+        }, 300);
+      }, 50);
+    }
+  }
+
   const viewer = document.getElementById('viewer');
   const overlay = document.getElementById('loading-overlay');
   const errorMsg = document.getElementById('error-msg');
