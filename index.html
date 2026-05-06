@@ -8,283 +8,55 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --saffron: #FF9933;
-      --deep: #1a1208;
-      --gold: #C8972A;
-      --cream: #F5EDD8;
-      --stone: #8C7B65;
-      --white: #FAF7F2;
-    }
-
-    html, body {
-      height: 100%;
-      background: var(--deep);
-      color: var(--cream);
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-
-    /* ── TOP HEADER ── */
-    header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 32px;
-      background: linear-gradient(to bottom, rgba(26,18,8,0.95), transparent);
-    }
-
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 13px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      opacity: 0.8;
-    }
-
-    .badge {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
-
-    .badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--saffron);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    /* ── VIEWER ── */
-    .viewer-wrap {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    model-viewer {
-      width: 100%;
-      flex: 1;
-      background: radial-gradient(ellipse at 50% 60%, #2e1f0a 0%, #100c04 60%, #0a0804 100%);
-      --poster-color: transparent;
-    }
-
-    /* AR button */
-    #ar-button {
-      position: absolute;
-      bottom: 28px;
-      right: 28px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--saffron);
-      color: var(--deep);
-      border: none;
-      border-radius: 50px;
-      padding: 13px 22px;
-      font-family: 'Jost', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 4px 30px rgba(255,153,51,0.4);
-      transition: all 0.25s ease;
-    }
-
-    #ar-button:hover {
-      background: #ffad52;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 40px rgba(255,153,51,0.5);
-    }
-
-    #ar-button svg {
-      width: 18px; height: 18px;
-    }
-
-    /* not available in browser message */
-    #ar-button[slot="ar-button"]:not([ar-status]) {
-      display: none;
-    }
-
-    /* Loading overlay */
-    #loading-overlay {
-      position: absolute;
-      inset: 0;
-      background: var(--deep);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      z-index: 10;
-      transition: opacity 0.6s ease;
-    }
-
-    #loading-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .spinner {
-      width: 44px; height: 44px;
-      border: 2px solid rgba(200,151,42,0.2);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
+    :root { --saffron: #FF9933; --deep: #1a1208; --gold: #C8972A; --cream: #F5EDD8; --stone: #8C7B65; --white: #FAF7F2; }
+    html, body { height: 100%; background: var(--deep); color: var(--cream); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; }
+    header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: linear-gradient(to bottom, rgba(26,18,8,0.95), transparent); }
+    .logo { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); opacity: 0.8; }
+    .badge { display: flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--saffron); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .viewer-wrap { position: relative; width: 100%; height: 100vh; display: flex; flex-direction: column; }
+    model-viewer { width: 100%; flex: 1; background: radial-gradient(ellipse at 50% 60%, #2e1f0a 0%, #100c04 60%, #0a0804 100%); --poster-color: transparent; }
+    #ar-button { position: absolute; bottom: 28px; right: 28px; display: flex; align-items: center; gap: 10px; background: var(--saffron); color: var(--deep); border: none; border-radius: 50px; padding: 13px 22px; font-family: 'Jost', sans-serif; font-size: 13px; font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; box-shadow: 0 4px 30px rgba(255,153,51,0.4); transition: all 0.25s ease; }
+    #ar-button:hover { background: #ffad52; transform: translateY(-2px); }
+    #loading-overlay { position: absolute; inset: 0; background: var(--deep); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; z-index: 10; transition: opacity 0.6s ease; }
+    #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+    .spinner { width: 44px; height: 44px; border: 2px solid rgba(200,151,42,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 14px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
-
-    /* ── BOTTOM INFO PANEL ── */
-    .info-panel {
-      position: absolute;
-      bottom: 28px;
-      left: 28px;
-      max-width: 340px;
-      pointer-events: none;
-    }
-
-    .info-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 300;
-      line-height: 1.1;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-
-    .info-name em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .info-dates {
-      font-size: 11px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--stone);
-      margin-bottom: 14px;
-    }
-
-    .info-quote {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 15px;
-      line-height: 1.65;
-      color: rgba(245,237,216,0.65);
-      border-left: 2px solid var(--saffron);
-      padding-left: 14px;
-    }
-
-    /* ── CONTROLS HINT ── */
-    .controls-hint {
-      position: absolute;
-      top: 80px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      opacity: 0.5;
-    }
-
-    .hint-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
-
-    .hint-icon {
-      width: 28px; height: 28px;
-      border: 1px solid rgba(140,123,101,0.4);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-
-    /* ── DIVIDER LINE ── */
-    .gold-line {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0.4;
-    }
-
-    /* ── SOURCE TAG ── */
-    .source-tag {
-      position: absolute;
-      top: 72px;
-      left: 32px;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(140,123,101,0.5);
-    }
-
-    /* mobile tweaks */
-    @media (max-width: 600px) {
-      .controls-hint { display: none; }
-      .info-panel { max-width: 260px; }
-      #ar-button { bottom: 100px; right: 16px; }
-      .info-panel { bottom: 16px; left: 16px; }
-    }
+    .loading-text { font-family: 'Cormorant Garamond', serif; font-size: 14px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--stone); }
+    #error-msg { display: none; color: #ff6b6b; font-size: 13px; text-align: center; max-width: 300px; line-height: 1.6; }
+    .info-panel { position: absolute; bottom: 28px; left: 28px; max-width: 340px; pointer-events: none; }
+    .info-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 300; line-height: 1.1; color: var(--white); margin-bottom: 6px; }
+    .info-name em { font-style: italic; color: var(--gold); }
+    .info-dates { font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--stone); margin-bottom: 14px; }
+    .info-quote { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; line-height: 1.65; color: rgba(245,237,216,0.65); border-left: 2px solid var(--saffron); padding-left: 14px; }
+    .gold-line { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0.4; }
+    .source-tag { position: absolute; top: 72px; left: 32px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(140,123,101,0.5); }
+    .controls-hint { position: absolute; top: 80px; right: 20px; display: flex; flex-direction: column; gap: 8px; opacity: 0.5; }
+    .hint-item { display: flex; align-items: center; gap: 8px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--stone); }
+    .hint-icon { width: 28px; height: 28px; border: 1px solid rgba(140,123,101,0.4); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    @media (max-width: 600px) { .controls-hint { display: none; } .info-panel { max-width: 260px; bottom: 16px; left: 16px; } #ar-button { bottom: 100px; right: 16px; } }
   </style>
 </head>
 <body>
-
 <header>
   <span class="logo">Gandhi Heritage Project</span>
-  <span class="badge">
-    <span class="badge-dot"></span>
-    3D · AR Ready
-  </span>
+  <span class="badge"><span class="badge-dot"></span>3D · AR Ready</span>
 </header>
 
 <div class="viewer-wrap">
   <div class="gold-line"></div>
   <span class="source-tag">Mapusa, Goa · 3D Scan</span>
 
-  <!-- Loading overlay -->
   <div id="loading-overlay">
     <div class="spinner"></div>
     <div class="loading-text">Loading model…</div>
+    <div id="error-msg"></div>
   </div>
 
   <model-viewer
     id="viewer"
-    src="gandhi_optimized.glb"
+    src="./gandhi_plain.glb"
     alt="Mahatma Gandhi Statue from Mapusa, Goa"
     ar
     ar-modes="webxr scene-viewer quick-look"
@@ -296,12 +68,10 @@
     shadow-softness="0.8"
     exposure="1.1"
     environment-image="neutral"
-    min-camera-orbit="auto auto 0.5m"
-    max-camera-orbit="auto auto 4m"
     touch-action="pan-y"
   >
     <button slot="ar-button" id="ar-button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M5 3H3v4M19 3h2v4M5 21H3v-4M19 21h2v-4"/>
         <rect x="7" y="7" width="10" height="10" rx="1"/>
       </svg>
@@ -309,39 +79,42 @@
     </button>
   </model-viewer>
 
-  <!-- Info panel -->
   <div class="info-panel">
     <div class="info-name">Mahatma<br><em>Gandhi</em></div>
     <div class="info-dates">Oct 2, 1869 — Jan 30, 1948</div>
-    <div class="info-quote">
-      "Be the change you wish<br>to see in the world."
-    </div>
+    <div class="info-quote">"Be the change you wish<br>to see in the world."</div>
   </div>
 
-  <!-- Controls hint -->
   <div class="controls-hint">
-    <div class="hint-item">
-      <div class="hint-icon">⟳</div>
-      Drag to rotate
-    </div>
-    <div class="hint-item">
-      <div class="hint-icon">⤢</div>
-      Pinch to zoom
-    </div>
+    <div class="hint-item"><div class="hint-icon">⟳</div>Drag to rotate</div>
+    <div class="hint-item"><div class="hint-icon">⤢</div>Pinch to zoom</div>
   </div>
 </div>
 
 <script>
   const viewer = document.getElementById('viewer');
   const overlay = document.getElementById('loading-overlay');
+  const errorMsg = document.getElementById('error-msg');
 
   viewer.addEventListener('load', () => {
     overlay.classList.add('hidden');
   });
 
-  // Fallback: hide overlay after 8s if event doesn't fire
-  setTimeout(() => overlay.classList.add('hidden'), 8000);
-</script>
+  viewer.addEventListener('error', (e) => {
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('.loading-text').style.display = 'none';
+    errorMsg.style.display = 'block';
+    errorMsg.textContent = 'Error: ' + (e.detail?.message || JSON.stringify(e.detail) || 'Failed to load model');
+  });
 
+  setTimeout(() => {
+    if (!overlay.classList.contains('hidden')) {
+      document.querySelector('.spinner').style.display = 'none';
+      document.querySelector('.loading-text').style.display = 'none';
+      errorMsg.style.display = 'block';
+      errorMsg.textContent = 'Timed out — check the browser console for details.';
+    }
+  }, 20000);
+</script>
 </body>
 </html>
